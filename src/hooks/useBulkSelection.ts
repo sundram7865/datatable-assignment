@@ -4,8 +4,7 @@ import type { Artwork } from '../types/artwork';
 
 export const useBulkSelection = (
   selectedRows: { [id: number]: Artwork },
-  setSelectedRows: (rows: { [id: number]: Artwork }) => void,
-  MAX_SELECTION: number
+  setSelectedRows: (rows: { [id: number]: Artwork }) => void
 ) => {
   const [overlayInput, setOverlayInput] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -15,7 +14,7 @@ export const useBulkSelection = (
     artworks: Artwork[],
     totalRecords: number
   ) => {
-    if (overlayInput <= 0 || overlayInput > MAX_SELECTION) return 0;
+    if (overlayInput <= 0) return 0;
 
     setIsSubmitting(true);
     

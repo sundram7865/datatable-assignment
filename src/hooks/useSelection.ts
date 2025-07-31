@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { Artwork } from '../types/artwork';
 
-const MAX_SELECTION = 100;
+
 
 export const useSelection = () => {
   const [selectedRows, setSelectedRows] = useState<{ [id: number]: Artwork }>({});
@@ -28,6 +28,6 @@ export const useSelection = () => {
     isRowSelected,
     toggleRow,
     forceUpdate,
-    MAX_SELECTION
+
   };
 };

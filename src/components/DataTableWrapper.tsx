@@ -14,8 +14,8 @@ import { useBulkSelection } from '../hooks/useBulkSelection';
 import type { Artwork } from '../types/artwork';
 
 export default function DataTableWrapper() {
-  const op = useRef<OverlayPanel | null>(null);
-  const toast = useRef<Toast | null>(null);
+  const op = useRef<OverlayPanel>(null);
+  const toast = useRef<Toast>(null);
   
   const {
     artworks,
@@ -31,7 +31,6 @@ export default function DataTableWrapper() {
     setSelectedRows,
     isRowSelected,
     toggleRow,
-    MAX_SELECTION
   } = useSelection();
   
   const {
@@ -41,18 +40,20 @@ export default function DataTableWrapper() {
     handleBulkSelection
   } = useBulkSelection(
     selectedRows,
-    setSelectedRows,
-    MAX_SELECTION
+    setSelectedRows
   );
 
   const handleRowClick = (e: DataTableRowClickEvent) => {
-    if ((e.originalEvent.target as HTMLElement).closest('.p-checkbox')) {
+    const target = e.originalEvent.target as HTMLElement;
+    if (target.closest('.p-checkbox')) {
       return;
     }
     toggleRow(e.data as Artwork);
   };
 
   const handleOverlaySubmit = async () => {
+    if (overlayInput <= 0) return;
+
     try {
       const selectedCount = await handleBulkSelection(page, artworks, totalRecords);
       setOverlayInput(0);
@@ -80,7 +81,7 @@ export default function DataTableWrapper() {
   };
 
   return (
-   <div className="p-4" key={Object.keys(selectedRows).length}>
+    <div className="p-4" key={Object.keys(selectedRows).length}>
       <Toast ref={toast} position="top-right" />
       <h2 className="text-xl font-bold mb-3">Artworks Table</h2>
 
@@ -91,10 +92,9 @@ export default function DataTableWrapper() {
             <InputNumber
               id="selectCount"
               value={overlayInput}
-              onValueChange={(e) => setOverlayInput(Math.min(e.value ?? 0, MAX_SELECTION))}
+              onValueChange={(e) => setOverlayInput(e.value ?? 0)}
               mode="decimal"
               min={0}
-              max={MAX_SELECTION}
               className="w-full"
             />
           </div>
