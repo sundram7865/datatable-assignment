@@ -5,14 +5,17 @@ import type { Artwork } from '../types/artwork';
 export const useBulkSelection = (
   selectedRows: { [id: number]: Artwork },
   setSelectedRows: (rows: { [id: number]: Artwork }) => void,
-  forceUpdate: () => void,
   MAX_SELECTION: number
 ) => {
   const [overlayInput, setOverlayInput] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleBulkSelection = async (currentPage: number, artworks: Artwork[], totalRecords: number) => {
-    if (overlayInput <= 0 || overlayInput > MAX_SELECTION) return;
+  const handleBulkSelection = async (
+    currentPage: number,
+    artworks: Artwork[],
+    totalRecords: number
+  ) => {
+    if (overlayInput <= 0 || overlayInput > MAX_SELECTION) return 0;
 
     setIsSubmitting(true);
     
@@ -47,8 +50,6 @@ export const useBulkSelection = (
       }
 
       setSelectedRows(newSelected);
-      forceUpdate();
-      
       return overlayInput - remainingToSelect;
     } catch (error) {
       console.error('Error during bulk selection:', error);
